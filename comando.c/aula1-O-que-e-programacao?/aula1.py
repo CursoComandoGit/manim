@@ -1452,22 +1452,3 @@ class Final(MovingCameraScene):
         # Nomes e Cargos
         self.play(AnimationGroup(FadeIn(creditos.move_to(ORIGIN))))
         self.wait()
-
-class teste(Scene):
-    def construct(self):
-        logo_svg = SVGMobject("assets/arvore.svg").scale(2)
-        comando = Text("comando.c", font="Major Mono Display").shift(2*DOWN).scale(.8)
-        cursor = Rectangle(
-            color = GREY_A,
-            fill_color = GREY_A,
-            fill_opacity = 1.0,
-            height = 1.1,
-            width = 0.5,
-        ).scale(.5).move_to(comando[0])
-        self.play(Write(logo_svg), run_time=2)
-        self.play(logo_svg.animate.shift(.5*UP))
-        self.play(TypeWithCursor(comando, cursor), run_time=1.5)
-        self.play(Blink(cursor, blinks=2))
-        self.wait()
-
-        self.clear()
