@@ -291,7 +291,26 @@ read:
         svgPython = ImageMobject("MANIM_RECURSOS/python.png").move_to((4,0,0)).scale(0.3)
 
         pngC = ImageMobject("MANIM_RECURSOS/icon_c.png").move_to((0,-12,0)).scale(0.3)
-        svgX = SVGMobject("MANIM_RECURSOS/x.svg").scale(1.5)
+        cross = Cross(stroke_width=30).scale(2)
+
+# --- CENA EXTRA ENTRE 15 - 16 ----
+        # Areas (Posso tirar algumas qualquer coisa)
+        textDevJogos = Text("Criação de Jogos")
+        textDados = Text("Ciência de Dados")
+        textML = Text("Machine Learning")
+        textEtc2 = Text("Etc...")
+
+        groupAreas = VGroup(textDevJogos,textDados,textML,textEtc2).arrange(DOWN,buff=0.3).move_to(LEFT*12)
+
+        # }
+        lineAreas = Line(start=(0,2.5,0),end=(0,-2.5,0))
+        braceAreas = Brace(lineAreas,RIGHT,color="#FFFF00")
+
+        # Não usa C
+        textNM = Text("No mercado,")
+        textNC = Text("não utiliza-se C",t2c={"não":"RED","C":"#AA77C7"})
+
+        groupNMC = VGroup(textNM,textNC).arrange(DOWN,buff=0.2).move_to(RIGHT*3)
 
 # --- CENA 16 ---- Características em Lista, Minimalista
         # Título "Características Centrais de C"
@@ -567,7 +586,7 @@ print(saida);'''
         self.play(Unwrite(textChar), Unwrite(textInt), Unwrite(textEtc))
 
 # NEXT_SECTION
-        self.next_section() # É NECESSÁRIO remover esse skip_animations=True na hora de renderizar o vídeo completo
+        self.next_section(skip_animations=True) # É NECESSÁRIO remover esse skip_animations=True na hora de renderizar o vídeo completo
 
 # --- CENA 6 ---- 1973, Kernel flechinha para a logo de C
         
@@ -694,7 +713,7 @@ print(saida);'''
         self.play(ShrinkToCenter(svgTerra), ShrinkToCenter(svgSoftware), ShrinkToCenter(imageEletronico), ShrinkToCenter(imageIndustria))
 
 # NEXT_SECTION
-        self.next_section(skip_animations=True) # É NECESSÁRIO remover esse skip_animations=True na hora de renderizar o vídeo completo
+        self.next_section() # É NECESSÁRIO remover esse skip_animations=True na hora de renderizar o vídeo completo
 
 # --- CENA 12 ---- A linha do tempo das CXX
         self.play(Create(arrowLinhaC))
@@ -741,10 +760,23 @@ print(saida);'''
         # Logo de C sobre
         self.play(pngC.animate.move_to(ORIGIN))
         self.play(ShrinkToCenter(svgCPP),ShrinkToCenter(svgJava),ShrinkToCenter(svgPython))
-        self.play(Create(svgX))
+        self.play(Create(cross))
+        self.wait()
 
-        # Desfaz tudo para a próxima cena]
-        self.play(Uncreate(svgX),FadeOut(pngC))
+        # Desfaz tudo para a próxima cena
+        self.play(Uncreate(cross),FadeOut(pngC))
+
+# --- CENA EXTRA ENTRE 15 - 16 ----
+        # Adiciona as coisas
+        self.play(groupAreas.animate.move_to(LEFT*3))
+        self.wait()
+        self.play(FadeIn(braceAreas))
+        self.wait()
+        self.play(Write(groupNMC))
+        self.wait()
+
+        # Remove as coisas
+        self.play(Unwrite(groupNMC),Unwrite(groupAreas),FadeOut(braceAreas))
 
 # --- CENA 16 ---- Características em Lista, Minimalista
         # Titulo e subtitulo sobre C ser minimalista
