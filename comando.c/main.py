@@ -378,6 +378,21 @@ var + 1;'''
         linha1 = textoAgrupado[0]
         linha2 = textoAgrupado[1]
         linha4 = textoAgrupado[3]
+        
+# --- CENA 19.2 --- C é professor
+        professor = SVGMobject("MANIM_RECURSOS/professor.svg").scale(3)
+        logoDoC = ImageMobject("MANIM_RECURSOS/icon_c.png").scale(0.2)
+        topicos = VGroup(Text("Desempenho", font_size=40,),
+                         Text("Memória", font_size=40,),
+                         Text("Algoritmos")
+                         )
+        logoDoC.move_to([-2.1,1.6,0])
+        professor.set_color(WHITE)
+        for a in range(3,11):
+            professor[a].set_color("#1E1E1E") #livrando espaço do quadro
+        topicos[0].move_to([1,2,0])
+        topicos[1].move_to([1.5, 1.2,0])
+        topicos[2].move_to([0.9,0,0])
 
 # --- CENA 20 ---- SVG de programador e duas caracteristicas na tela
         text1 = Text("1.",color="#58C4DD").move_to((-4.3,1,0))
@@ -389,6 +404,10 @@ var + 1;'''
         imageProgramador = ImageMobject("MANIM_RECURSOS/programmer.png").scale(0.5).move_to((-2,12,0)) 
         # Eu devia ter começado a colocar ref antes mas https://www.flaticon.com/free-icon/programmer_560278?term=programmer&page=1&position=35&origin=tag&related_id=560278
         svgRoda = ImageMobject("MANIM_RECURSOS/roda.png").scale(0.5).move_to((2,-12,0)) 
+# ---CENA 20.2 ---
+        pilha = SVGMobject("MANIM_RECURSOS/stack.svg").set_color(WHITE)
+        arvore = SVGMobject("MANIM_RECURSOS/edArvore.svg").set_color(WHITE)
+        
 
 # --- CENA 21 ---- “saida=ResolvaMeuProblema(); print(saida);”)
         # Codigo
@@ -489,7 +508,7 @@ print(saida);'''
 
 
 # ------------------------- ANIMAÇÕES -------------------------------------
-        self.next_section(skip_animations=True) # É NECESSÁRIO remover esse skip_animations=True na hora de renderizar o vídeo completo
+        self.next_section() # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
         
 # --- CENA 1 ---- Só o texto linguagem C
         self.play(TypeWithCursor(textLinguagemC, cursor))
@@ -586,7 +605,7 @@ print(saida);'''
         self.play(Unwrite(textChar), Unwrite(textInt), Unwrite(textEtc))
 
 # NEXT_SECTION
-        self.next_section(skip_animations=True) # É NECESSÁRIO remover esse skip_animations=True na hora de renderizar o vídeo completo
+        self.next_section() # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
 
 # --- CENA 6 ---- 1973, Kernel flechinha para a logo de C
         
@@ -713,7 +732,7 @@ print(saida);'''
         self.play(ShrinkToCenter(svgTerra), ShrinkToCenter(svgSoftware), ShrinkToCenter(imageEletronico), ShrinkToCenter(imageIndustria))
 
 # NEXT_SECTION
-        self.next_section() # É NECESSÁRIO remover esse skip_animations=True na hora de renderizar o vídeo completo
+        self.next_section() # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
 
 # --- CENA 12 ---- A linha do tempo das CXX
         self.play(Create(arrowLinhaC))
@@ -811,7 +830,7 @@ print(saida);'''
         self.play(Uncreate(renderedCodeC),Uncreate(renderedCodeAsm),Uncreate(arrowCtoAsm),Unwrite(textExplicita),Unwrite(textCaracteristicas))
 
 # NEXT_SECTION
-        self.next_section(skip_animations=True) # É NECESSÁRIO remover esse skip_animations=True na hora de renderizar o vídeo completo
+        self.next_section() # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
 
 # --- CENA 18 ---- Logos Python e Java, “Lista? Array? Vetor?
         # Logos
@@ -840,7 +859,13 @@ print(saida);'''
 
         # Retira
         self.play(Uncreate(renderedCodeMalloc))
+# --- CENA 19.2 --- C é professor
+        self.play(FadeIn(professor), FadeIn(topicos))
+        self.wait(0.8)
+        self.play(FadeIn(logoDoC))
+        self.wait(2)
 
+        self.play(FadeOut(*self.mobjects))
 # --- CENA 20 ---- SVG de programador e duas caracteristicas na tela
         # Minimalista e Extremamente explicita
         self.play(FadeIn(text1),FadeIn(textMinimalista2),FadeIn(text2),FadeIn(textExplicita2))
@@ -849,9 +874,16 @@ print(saida);'''
         # SVG do programador
         self.play(imageProgramador.animate.move_to((-2,0,0)))
         self.play(svgRoda.animate.move_to((2,0,0)))
-
+# ---CENA 20.2 --- Roda se transforma
+        pilha.move_to(svgRoda.get_top() + [0,0.8,0])
+        arvore.move_to(svgRoda.get_bottom() + [0,-0.8,0])
+        self.play(svgRoda.animate.scale(0), run_time=0.6)
+        self.play(
+                  GrowFromPoint(arvore, svgRoda.get_center()),
+                  GrowFromPoint(pilha, svgRoda.get_center()),
+                  run_time=1.2)
         # Limpa
-        self.play(FadeOut(imageProgramador),FadeOut(svgRoda))
+        self.play(FadeOut(*self.mobjects))
 
 # --- CENA 21 ---- “saida=ResolvaMeuProblema(); print(saida);”)
         self.play(Create(renderedCodeResolva))
@@ -868,7 +900,7 @@ print(saida);'''
 
         # Remove SVG's
         self.play(ShrinkToCenter(pngPlay),ShrinkToCenter(pngCabo),ShrinkToCenter(pngVento),ShrinkToCenter(pngPuter))
-
+        
 # --- CENA 23 ---- parede de 0 e 1 e SVG de fone
         # Parede de 0 e 1
         self.play(textParede01.animate.move_to(ORIGIN))
@@ -895,7 +927,7 @@ print(saida);'''
         self.play(Uncreate(textInteragir),Uncreate(arrowInterface))
 
 # NEXT_SECTION
-        self.next_section(skip_animations=True) # É NECESSÁRIO remover esse skip_animations=True na hora de renderizar o vídeo completo
+        self.next_section() # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
 
 # --- CENA 25 ---- “Não vamos responder, vamos incentivar” e SVG's
         # Texto
@@ -934,9 +966,24 @@ print(saida);'''
         self.play(groupArquivoC1.animate.move_to((-4,0,0)))
         self.play(groupArquivoC2.animate.move_to(ORIGIN))
         self.play(groupArquivoC3.animate.move_to((4,0,0)))
-
+#---Cena 27.2---
+#---CENA 27.2---Exemplo de projeto (to definindo aqui pq os arquivos so se movem na animação)
+        #ajuda nn sei oq colocar aqui. Fica Terry Davis por enquanto
+        youtube = ImageMobject("MANIM_RECURSOS/terryDavis.png").move_to(pngArquivoC1.get_center()) 
+        http = ImageMobject("MANIM_RECURSOS/randomAhhImage.png").move_to(pngArquivoC2.get_center()).scale(0.8) #aqui nn sei tbm
+        quake = ImageMobject("MANIM_RECURSOS/editorQuake.png").move_to(pngArquivoC3.get_center()).scale(0.5)
+        youtube.shift([0,0.5,0])
+        http.shift([0,0.5,0])
+        quake.shift([0,0.5,0])
+        self.play(AnimationGroup(pngArquivoC1.animate.scale(0), run_time=0.5),
+                  GrowFromCenter(youtube))
+        self.play(AnimationGroup(pngArquivoC2.animate.scale(0), run_time=0.5),
+                  GrowFromCenter(http))
+        self.play(AnimationGroup(pngArquivoC3.animate.scale(0), run_time=0.5),
+                  GrowFromCenter(quake))
+        self.wait()
         # Limpa a tela
-        self.play(ShrinkToCenter(groupArquivoC1),ShrinkToCenter(groupArquivoC2),ShrinkToCenter(groupArquivoC3))
+        self.play(*[ShrinkToCenter(obj) for obj in self.mobjects])
 
 # --- CENA 28 ---- (“Não é só sobre C, é uma filosofia de estudo”)
         # Aparece o texto com FadeIn para não cansar o leitor de ficar vendo a mesma coisa
