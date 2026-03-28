@@ -405,8 +405,28 @@ var + 1;'''
         # Eu devia ter começado a colocar ref antes mas https://www.flaticon.com/free-icon/programmer_560278?term=programmer&page=1&position=35&origin=tag&related_id=560278
         svgRoda = ImageMobject("MANIM_RECURSOS/roda.png").scale(0.5).move_to((2,-12,0)) 
 # ---CENA 20.2 ---
-        pilha = SVGMobject("MANIM_RECURSOS/stack.svg").set_color(WHITE)
-        arvore = SVGMobject("MANIM_RECURSOS/edArvore.svg").set_color(WHITE)
+        ideia = SVGMobject("MANIM_RECURSOS/ideia.svg").move_to([-0.2,-0.5,0])
+        texto_cor = WHITE
+        
+        fita = VGroup()
+        celulas = []
+        valores = ["1", "5", "2", "10", "0", "6"]
+        #criação do vetor
+        for i, valor in enumerate(valores):
+            celula = Rectangle(
+                height=1, width=1,
+                fill_color=BLUE_E,
+                fill_opacity=0.4,
+                stroke_color=WHITE,
+                stroke_width=2
+            )
+            texto = Text(valor, color=texto_cor, font_size=36)
+            
+            grupo_celula = VGroup(celula, texto)
+            grupo_celula.move_to(np.array([i - len(valores)/2 + 0.5, 0, 0]))
+            celulas.append(grupo_celula)
+            fita.add(grupo_celula)
+        fita.move_to([0,3,0])
         
 
 # --- CENA 21 ---- “saida=ResolvaMeuProblema(); print(saida);”)
@@ -875,13 +895,37 @@ print(saida);'''
         self.play(imageProgramador.animate.move_to((-2,0,0)))
         self.play(svgRoda.animate.move_to((2,0,0)))
 # ---CENA 20.2 --- Roda se transforma
-        pilha.move_to(svgRoda.get_top() + [0,0.8,0])
-        arvore.move_to(svgRoda.get_bottom() + [0,-0.8,0])
-        self.play(svgRoda.animate.scale(0), run_time=0.6)
-        self.play(
-                  GrowFromPoint(arvore, svgRoda.get_center()),
-                  GrowFromPoint(pilha, svgRoda.get_center()),
-                  run_time=1.2)
+        self.play(ShrinkToCenter(svgRoda), imageProgramador.animate.move_to([0,-3,0]), run_time=0.6)
+        self.play(GrowFromCenter(fita))
+        metadeE = VGroup(fita[0], fita[1], fita[2])
+        metadeD = VGroup(fita[3], fita[4], fita[5])
+
+        self.play(metadeE.animate.shift([-2.5,-1,0]),
+                metadeD.animate.shift([2.5,-1,0])) #primeira divisão
+        self.play(metadeE[0].animate.shift([-1,-1,0]), metadeE[1].animate.shift([-1,-1,0]),
+                  metadeE[2].animate.shift([1,-1,0]),
+                  metadeD[0].animate.shift([-1,-1,0]), metadeD[1].animate.shift([-1,-1,0]),
+                  metadeD[2].animate.shift([1,-1,0])) #segunda divisão
+        
+        self.play(metadeE[0].animate.shift([0,-1,0]), metadeE[1].animate.shift([1,-1,0]),
+                  metadeE[2].animate.shift([1,-1,0]),
+                  metadeD[0].animate.shift([-1,-1,0]), metadeD[1].animate.shift([1,-1,0]),
+                  metadeD[2].animate.shift([0,-1,0])) #terceira e última
+        self.wait()
+        self.play(metadeE[0].animate.shift([0,1,0]), metadeE[1].animate.shift([-1,1,0]),
+                  metadeE[2].animate.shift([-1,1,0]),
+                  metadeD[0].animate.shift([2,1,0]), metadeD[1].animate.shift([-2,1,0]),
+                  metadeD[2].animate.shift([0,1,0]),) #primeiro merge
+        
+        self.play(metadeE[0].animate.shift([0,1,0]), metadeE[1].animate.shift([1,1,0]),
+                  metadeE[2].animate.shift([-3,1,0]),
+                  metadeD[0].animate.shift([1,1,0]), metadeD[1].animate.shift([0,1,0]),
+                  metadeD[2].animate.shift([-3,1,0])) #segundo merge
+        
+        self.play(metadeD[1].animate.move_to([-2.5,3,0]), metadeE[0].animate.move_to([-1.5,3,0]), metadeE[2].animate.move_to([-0.5,3,0]),
+                  metadeE[1].animate.move_to([0.5,3,0]), metadeD[2].animate.move_to([1.5,3,0]), metadeD[0].animate.move_to([2.5,3,0])) #merge final
+        
+        self.play(FadeIn(ideia))
         # Limpa
         self.play(FadeOut(*self.mobjects))
 
@@ -968,9 +1012,8 @@ print(saida);'''
         self.play(groupArquivoC3.animate.move_to((4,0,0)))
 #---Cena 27.2---
 #---CENA 27.2---Exemplo de projeto (to definindo aqui pq os arquivos so se movem na animação)
-        #ajuda nn sei oq colocar aqui. Fica Terry Davis por enquanto
-        youtube = ImageMobject("MANIM_RECURSOS/terryDavis.png").move_to(pngArquivoC1.get_center()) 
-        http = ImageMobject("MANIM_RECURSOS/randomAhhImage.png").move_to(pngArquivoC2.get_center()).scale(0.8) #aqui nn sei tbm
+        youtube = ImageMobject("MANIM_RECURSOS/aulaExemplo.png").move_to(pngArquivoC1.get_center()).scale(0.4) 
+        http = ImageMobject("MANIM_RECURSOS/http.png").move_to(pngArquivoC2.get_center()).scale(0.58) #aqui nn sei tbm
         quake = ImageMobject("MANIM_RECURSOS/editorQuake.png").move_to(pngArquivoC3.get_center()).scale(0.5)
         youtube.shift([0,0.5,0])
         http.shift([0,0.5,0])
