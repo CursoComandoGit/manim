@@ -320,8 +320,21 @@ read:
         textMinimalista = Text("1. Minimalista").move_to((0,2,0))
 
         # Código de inclusão da biblioteca String.h
-        codeString = '''#include <string.h>'''  
-        renderedCodeString = Code(code_string=codeString, language="c", formatter_style="monokai", background="rectangle", background_config={"fill_color": "#4400FFFF", "stroke_color": "WHITE", "fill_opacity":0.1})
+        codeString = r'''char origem[] = "String bem importante";
+
+int i = 0;
+while (origem[i] != '\0') i++; // calcula tamanho
+
+char *destino = (char*) malloc((i + 1) * sizeof(char)); // aloca memória
+
+for (int j = 0; j < i; j++) { // copia caractere por caractere
+    destino[j] = origem[j];
+}
+
+destino[i] = '\0'; // finaliza string
+
+printf("String: %s\n", destino);'''  
+        renderedCodeString = Code(code_string=codeString, language="c", formatter_style="monokai", background="rectangle", background_config={"fill_color": "#4400FFFF", "stroke_color": "WHITE", "fill_opacity":0.1}).move_to((0,-1,0)).scale(0.6)
 
         # Logos C++ e Python
         svgCPP2 = SVGMobject("MANIM_RECURSOS/c++.svg").move_to((-3,0.5,0))
@@ -353,6 +366,7 @@ add eax, ebx'''
         # Logos de Java e Python
         svgJava2 = SVGMobject("MANIM_RECURSOS/java.svg").move_to((-3,2,0)).scale(1.2)
         pngPython2 = ImageMobject("MANIM_RECURSOS/python.png").move_to((3,2,0)).scale(0.3)
+        pngC2 = ImageMobject("MANIM_RECURSOS/icon_c.png").move_to((3,2,0)).scale(0.2)
 
         # Lista?
         textLista = Text("Lista?",color="#236B8E")
@@ -363,6 +377,32 @@ add eax, ebx'''
         # Vetor?
         textVetor = Text("Vetor?",color="#58C4DD").move_to((0,-2,0))
 
+        # Codigo lista
+        codeLista=r'''lista=[1, 2, 3]'''
+
+        renderedCodeLista = Code(code_string=codeLista, language="python", formatter_style="monokai", background="rectangle", background_config={"fill_color": "#4400FFFF", "stroke_color": "WHITE", "fill_opacity":0.1}).move_to((-3,-1.2,0)).scale(0.9)
+
+        # Codigo nodo de C
+        codeNodo=r'''typedef struct Nodo {
+    int valor;
+    struct Nodo* proximo;
+} Nodo;
+
+Nodo* criar_nodo(int valor) {
+    Nodo* novo = (Nodo*) malloc(sizeof(Nodo));
+    novo->valor = valor;
+    novo->proximo = NULL;
+    return novo;
+}
+
+int main() {
+    Nodo* lista = criar_nodo(1);
+    lista->proximo = criar_nodo(2);
+    lista->proximo->proximo = criar_nodo(3);
+}'''
+
+        renderedCodeNodo = Code(code_string=codeNodo, language="c", formatter_style="monokai", background="rectangle", background_config={"fill_color": "#4400FFFF", "stroke_color": "WHITE", "fill_opacity":0.1}).move_to((3,-1.5,0)).scale(0.6)
+
 # --- CENA 19 ---- Código de Malloc
         # Código
         code_str = '''
@@ -370,6 +410,7 @@ add eax, ebx'''
 int *var = (int *)malloc(sizeof(int )); 
 
 var + 1;'''
+
 
         renderedCodeMalloc = Code(code_string=code_str, language="c", formatter_style="monokai", background="rectangle", background_config={"fill_color": "#4400FFFF", "stroke_color": "WHITE", "fill_opacity":0.1})
 
@@ -528,7 +569,7 @@ print(saida);'''
 
 
 # ------------------------- ANIMAÇÕES -------------------------------------
-        self.next_section(skip_animations=True) # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
+        self.next_section() # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
         
 # --- CENA 1 ---- Só o texto linguagem C
         self.play(TypeWithCursor(textLinguagemC, cursor))
@@ -625,7 +666,7 @@ print(saida);'''
         self.play(Unwrite(textChar), Unwrite(textInt), Unwrite(textEtc))
 
 # NEXT_SECTION
-        self.next_section(skip_animations=True) # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
+        self.next_section() # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
 
 # --- CENA 6 ---- 1973, Kernel flechinha para a logo de C
         
@@ -752,7 +793,7 @@ print(saida);'''
         self.play(ShrinkToCenter(svgTerra), ShrinkToCenter(svgSoftware), ShrinkToCenter(imageEletronico), ShrinkToCenter(imageIndustria))
 
 # NEXT_SECTION
-        self.next_section(skip_animations=True) # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
+        self.next_section() # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
 
 # --- CENA 12 ---- A linha do tempo das CXX
         self.play(Create(arrowLinhaC))
@@ -850,7 +891,7 @@ print(saida);'''
         self.play(Uncreate(renderedCodeC),Uncreate(renderedCodeAsm),Uncreate(arrowCtoAsm),Unwrite(textExplicita),Unwrite(textCaracteristicas))
 
 # NEXT_SECTION
-        self.next_section(skip_animations=True) # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
+        self.next_section() # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
 
 # --- CENA 18 ---- Logos Python e Java, “Lista? Array? Vetor?
         # Logos
@@ -865,8 +906,16 @@ print(saida);'''
         self.wait()
 
         # Retira
-        self.play(ShrinkToCenter(svgJava2),ShrinkToCenter(pngPython2),Unwrite(textLista),Unwrite(textArray),Unwrite(textVetor))
+        self.play(ShrinkToCenter(svgJava2),Unwrite(textLista),Unwrite(textArray),Unwrite(textVetor))
         self.wait()
+
+        # Coloca as comparações de Python com C
+        self.play(SpinInFromNothing(pngC2),pngPython2.animate.move_to((-3,2,0)))
+        self.play(GrowFromCenter(renderedCodeLista),GrowFromCenter(renderedCodeNodo))
+        self.wait()
+        
+        # Apaga o que foi feito
+        self.play(ShrinkToCenter(renderedCodeLista),ShrinkToCenter(renderedCodeNodo),ShrinkToCenter(pngPython2),ShrinkToCenter(pngC2))
 
 # --- CENA 19 ---- Código de Malloc
         # Código em si
