@@ -458,7 +458,7 @@ print(saida);'''
         svgLupa = SVGMobject("MANIM_RECURSOS/lupa.svg").move_to((0.5,-1.5,0))
 
         textIncentivar = Text("Não vamos responder, ",t2c={"responder":"#58C4DD"}).move_to((-2.75,2,0))
-        textResponder = Text("vamos incentivar",t2c={"incentivar": "#AA77C7"}).next_to(textIncentivar,RIGHT)
+        textResponder = Text("vamos incentivar",t2c={"incentivar": "#AA77C7"}).move_to((3.5,2.05,0))
 
 # --- CENA 26 ---- (“Seja curioso, não aceite sem questionar.”)
         # Dessa vez é só o texto
@@ -528,7 +528,7 @@ print(saida);'''
 
 
 # ------------------------- ANIMAÇÕES -------------------------------------
-        self.next_section() # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
+        self.next_section(skip_animations=True) # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
         
 # --- CENA 1 ---- Só o texto linguagem C
         self.play(TypeWithCursor(textLinguagemC, cursor))
@@ -625,7 +625,7 @@ print(saida);'''
         self.play(Unwrite(textChar), Unwrite(textInt), Unwrite(textEtc))
 
 # NEXT_SECTION
-        self.next_section() # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
+        self.next_section(skip_animations=True) # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
 
 # --- CENA 6 ---- 1973, Kernel flechinha para a logo de C
         
@@ -752,7 +752,7 @@ print(saida);'''
         self.play(ShrinkToCenter(svgTerra), ShrinkToCenter(svgSoftware), ShrinkToCenter(imageEletronico), ShrinkToCenter(imageIndustria))
 
 # NEXT_SECTION
-        self.next_section() # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
+        self.next_section(skip_animations=True) # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
 
 # --- CENA 12 ---- A linha do tempo das CXX
         self.play(Create(arrowLinhaC))
@@ -850,7 +850,7 @@ print(saida);'''
         self.play(Uncreate(renderedCodeC),Uncreate(renderedCodeAsm),Uncreate(arrowCtoAsm),Unwrite(textExplicita),Unwrite(textCaracteristicas))
 
 # NEXT_SECTION
-        self.next_section() # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
+        self.next_section(skip_animations=True) # É NECESSÁRIO remover esse  na hora de renderizar o vídeo completo
 
 # --- CENA 18 ---- Logos Python e Java, “Lista? Array? Vetor?
         # Logos
