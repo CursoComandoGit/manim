@@ -1,7 +1,6 @@
 from manim import *
-from manim_slides.slide import Slide
 
-class Main(Slide): #Essa aula é o último teste com updaters para uma cena só. Na próxima separarei em diferentes classes
+class Main(Scene): #Essa aula é o último teste com updaters para uma cena só. Na próxima separarei em diferentes classes
     config.background_color = "#1E1E1E"
     Text.set_default(font = "Manrope")
     #Updater para scale
@@ -108,7 +107,7 @@ class Main(Slide): #Essa aula é o último teste com updaters para uma cena só.
         #Separando palavras e começando animação
         self.play(Write(rawTitle))
         self.wait()
-        self.next_slide()
+        
         #Separando letras e apps
         self.play(AnimationGroup(FadeOut(text), FadeOut(text2Group[1]), run_time=0.4),
                   text2Group[0][2].animate.move_to([5,-1.5,0]).scale(0), #B
@@ -143,9 +142,9 @@ class Main(Slide): #Essa aula é o último teste com updaters para uma cena só.
         self.play(Write(codeblocks), Write(eclipse), Write(vim), Write(mvs),
                   Write(neoVim), Write(pycharm), Write(vscode), Write(sublimeText), run_time=2)
         self.wait(3)
-        self.next_slide()
+        
         #Fade em tudo que não saiu
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
+        self.play(*[FadeOut(obj) for obj in self.mobjects])
 
         fullText.font_size = 80
         fullText[0].scale(1.1)
@@ -158,9 +157,9 @@ class Main(Slide): #Essa aula é o último teste com updaters para uma cena só.
         self.wait()
         self.play(Write(acronym))
         self.wait()
-        self.next_slide()
+        
         self.play(TransformMatchingTex(acronym, fullText))
-        self.next_slide()
+        
         self.wait(2)
         self.play(fullText.animate.scale(0.6))
         self.play(
@@ -168,13 +167,13 @@ class Main(Slide): #Essa aula é o último teste com updaters para uma cena só.
                   bottom.animate.shift([-15,0,0]),
                   rate_func = rate_functions.ease_out_back)
         self.wait()
-        self.next_slide()
+        
         #Ides e chinelada no codeblocks acontecem aqui
         self.play(FadeOut(naoIde))
         self.play(ide.animate.arrange(direction=RIGHT,buff=0.5, center=True),
                   ShrinkToCenter(fullText))
         self.wait()
-        self.next_slide()
+        
         #---Mostrar features desnecessários---
         net.move_to(mvs.get_center())
         debugger.move_to(codeblocks.get_center())
@@ -190,13 +189,13 @@ class Main(Slide): #Essa aula é o último teste com updaters para uma cena só.
             feature.remove_updater(self.grow_until_target)
             feature.remove_updater(self.physics_updater)
         #não precisa desses features
-        self.next_slide()
+        
         self.wait()
         crossGroup = VGroup(*[Cross(feature, color=RED, stroke_width=4) for feature in features])
         self.play(Write(crossGroup))
         self.wait(2)
 
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
+        self.play(*[FadeOut(obj) for obj in self.mobjects])
     def editoresTexto(self):
         titulo = Text("Editores de texto")
         vim = SVGMobject("svgs\\vim")
@@ -223,7 +222,7 @@ class Main(Slide): #Essa aula é o último teste com updaters para uma cena só.
         #Editores aparecem, linguagem C e destaque em vs code
         self.play(Write(titulo), Write(editors), run_time=2)
         self.wait(2)
-        self.next_slide()
+        
         self.play(editors.animate.shift([0,-2.5,0]))
         caixa1.move_to(editors.get_center())
         self.play(editors.animate.scale(0.8), Create(caixa1))
@@ -234,13 +233,13 @@ class Main(Slide): #Essa aula é o último teste com updaters para uma cena só.
         self.play(Wiggle(notePad, run_time=1))
         self.play(Wiggle(vscode, run_time=1))
         self.wait()
-        self.next_slide()
+        
         self.play(FadeOut(vim, sublimeText, notePad), run_time=0.6)
         self.play(vscode.animate.move_to([0,-2.5,0]),
                   Transform(caixa1, caixa2.move_to([0,-2.5,0])))
         self.wait(2)
         #Fade em tudo que não saiu
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
+        self.play(*[FadeOut(obj) for obj in self.mobjects])
 
     def posInstalacao(self):
         text = Text("Configurando um ambiente de programação:", font_size = 45)
@@ -255,9 +254,9 @@ class Main(Slide): #Essa aula é o último teste com updaters para uma cena só.
         self.wait()
         self.play(Create(risco))
         self.wait()
-        self.next_slide()
+        
         #Fade em tudo que não saiu
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
+        self.play(*[FadeOut(obj) for obj in self.mobjects])
 
     def terminalWSL(self):
         sample = "1. Estabilidade; 2. Confiabilidade; 3. Flexibilidade; 4. Servidores rodam linux; 5. Customização; 6. Segurança; 7. Privacidade; 8. Open Source; 9. Compatibilidade; 10. Portabilidade; 11. Performance; 12. Escalabilidade; 13. Ambiente de Desenvolvimento Nativo; 14. “Scriptable”; 15. Gerenciador de Pacotes"
@@ -286,7 +285,7 @@ class Main(Slide): #Essa aula é o último teste com updaters para uma cena só.
         self.play(linux.animate.move_to([8.1,0,0]), windowsMock.animate.move_to([20,0,0]), run_time = 0.8)
         self.wait(0.8)
         #Fade em tudo que não saiu
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
+        self.play(*[FadeOut(obj) for obj in self.mobjects])
 
     def explicandoLinux(self):
         usuario = SVGMobject("svgs\\person").move_to([0,2.8,0]).scale(0.9)
@@ -312,7 +311,7 @@ class Main(Slide): #Essa aula é o último teste com updaters para uma cena só.
                   Create(Line(usuario.get_center(), linux.get_center(), stroke_width = 3)),
                   Create(Line(linux.get_center(), cLanguage.get_center(), stroke_width = 3)))
         self.wait(2)
-        self.next_slide()
+        
         #Transform no wsl
         wsl.move_to(linux.get_center())
         self.play(ClockwiseTransform(linux, wsl))
@@ -321,7 +320,7 @@ class Main(Slide): #Essa aula é o último teste com updaters para uma cena só.
         linux2.move_to(linux.get_center())
         self.play(CounterclockwiseTransform(linux, linux2))
         self.wait()
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas], run_time=0.5)
+        self.play(*[FadeOut(obj) for obj in self.mobjects], run_time=0.5)
 
 
     def separacao(self):
@@ -352,8 +351,9 @@ class Main(Slide): #Essa aula é o último teste com updaters para uma cena só.
         self.wait(0.5)
         fullWords.shift([-0.8,0,0])
         fullWords[1].shift([0,-0.15,0])
-        self.play(AnimationGroup(windows.animate.shift(LEFT), run_time=0.65), AnimationGroup(Write(fullWords), run_time=1.25))
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas], run_time=0.5)
+        self.play(windows.animate.shift(LEFT), run_time=0.65)
+        self.play(Succession(*[AddTextLetterByLetter(word) for word in fullWords]), run_time=1.25)
+        self.play(*[FadeOut(obj) for obj in self.mobjects], run_time=0.5)
         #FINAL
         text = Text("Para a próxima aula:", font_size = 45)
         text2 = Text("Variáveis e os 5 Tipos de Dados", color = PURPLE, font_size=50)
@@ -361,7 +361,7 @@ class Main(Slide): #Essa aula é o último teste com updaters para uma cena só.
         
         self.play(Write(rawTitle))
         self.wait()
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas], run_time=0.5)
+        self.play(*[FadeOut(obj) for obj in self.mobjects], run_time=0.5)
         
 
     def creditos(self):
