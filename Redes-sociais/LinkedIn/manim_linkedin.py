@@ -70,8 +70,17 @@ class LinkedinParte1(MovingCameraScene):
         a2=Group(segunda, pessoas)
 
         terceira = MarkupText('<span><b>Fidelidade</b> ao\nconhecimento técnico</span>', font_size=70).scale(0.7).next_to(path[6], RIGHT, buff=0.6)
-        livro = ImageMobject("assets/livro.png").scale(0.6).next_to(terceira, UP, buff=0.4)
-        a3 = Group(terceira, livro)
+        livro = SVGMobject("assets/livro.svg").next_to(terceira, UP, buff=0.4)
+        lampada = SVGMobject("assets/lampada.svg").scale(1.2).next_to(terceira, UP, buff=0.4)
+        engrenagem = SVGMobject("assets/engrenagem.svg").scale(0.6).next_to(terceira, UP, buff=0.4)
+
+        lampada.shift(UP*0.5)
+        lampada.shift(RIGHT*1.2)
+        
+        engrenagem.shift(DOWN*0.2)
+        engrenagem.shift(LEFT*1.4)
+        
+        a3 = Group(terceira, livro, lampada)
         #-------------------------------------------------------------------------
 
         offset = 0 # ajusta câmera em relação ao traveller
@@ -89,7 +98,7 @@ class LinkedinParte1(MovingCameraScene):
             fim = path[i+1]
 
             dist = np.linalg.norm(fim - inicio)
-            tempo = dist * 0.3 # percorre 1 unidade de distância do path em 0.3s
+            tempo = dist * 0.15 # percorre 1 unidade de distância do path em 0.3s
 
             seg = Line(inicio, fim).set_color(PATH_COLOR).set_stroke(width=4)
 
@@ -102,7 +111,7 @@ class LinkedinParte1(MovingCameraScene):
             )
 
             if i in [1, 3, 5]:
-                self.wait(0.5)
+                
 
                 if i == 1:
                     self.play(
@@ -132,6 +141,8 @@ class LinkedinParte1(MovingCameraScene):
                     self.play(
                         FadeIn(terceira),
                         SpinInFromNothing(livro),
+                        FadeIn(lampada),
+                        FadeIn(engrenagem),
                         self.camera.frame.animate.move_to(a3),
                         run_time=1
                     )
@@ -143,9 +154,6 @@ class LinkedinParte1(MovingCameraScene):
 
         # Aqui começa a parte DOIS, mas eu retirei a classe por questão de interoperabilidade
         # ----- Objetos ------
-        # Antes cor invertida
-        terceiraInvertida = MarkupText('<span><b>Fidelidade</b> ao\nconhecimento técnico</span>', color="#1E1E1E", font_size=70).scale(0.7).next_to(path[6], RIGHT, buff=0.6)
-
         # Ai a câmera se move para cima desse objeto
         textPresenca = Text("Marcamos presença nas plataformas",
                             color="#1E1E1E",
@@ -162,15 +170,40 @@ class LinkedinParte1(MovingCameraScene):
         # Antes
         self.wait()
         
-        # troca o fundo de cor
-        self.camera.background_color = "#ece6e2"
-        self.remove(primeira,segunda, terceira, capelo)
-        self.add(terceiraInvertida)
+        # Algumas limpezas
+        self.remove(primeira,segunda, capelo)
         self.wait()
         
         # A câmera se move
-        self.play(self.camera.frame.animate.move_to(textPresenca))
-        self.wait()
+        self.play(self.camera.frame.animate.move_to(textPresenca),
+                  lampada.animate.move_to(textPresenca))
+        self.play(lampada.animate.scale(2))
+        
+        
+        # Cria o bg e faz ele SEGUIR a câmera
+        bg = Rectangle(
+            width=config.frame_width,
+            height=config.frame_height,
+            fill_color=BG_COLOR,      # começa com a cor atual
+            fill_opacity=1,
+            stroke_width=0,
+        ).set_z_index(-100)
+
+
+        # Faz o retângulo sempre ficar no centro do frame da câmera
+        bg.add_updater(lambda m: m.move_to(self.camera.frame.get_center()))
+        self.add(bg)
+
+
+        # Agora a transição funciona mesmo com câmera se movendo
+        self.play(
+            bg.animate.set_fill("#ece6e2"),  # cor destino
+            run_time=2,
+            rate_func=smooth,
+        )
+
+        # Lampada some
+        self.play(ShrinkToCenter(lampada))
 
         # Presenca
         self.play(Write(textPresenca))
@@ -295,6 +328,7 @@ class Rotatoria(MovingCameraScene):
 
         # ----- Animações -----
         self.camera.frame.save_state()
+        self.camera.background_color = "#ece6e2"
 
         self.play(Write(textEquipe1))
         self.wait()
@@ -309,39 +343,49 @@ class Rotatoria(MovingCameraScene):
         self.play(dotDiretoria.animate.shift(UP),run_time=0.5)
         self.play(Write(textDiretoria),run_time=0.5)
 
-        # Flecha tesouraria
-        self.add(pathTesouraria, dotTesouraria)
-        self.play(dotTesouraria.animate.shift((UP+RIGHT)*0.5),run_time=0.5)
-        self.play(dotTesouraria.animate.shift((RIGHT)*0.8),run_time=0.5)
-        self.play(Write(textTesouraria),run_time=0.5)
+        # Flecha tesouraria + Eem
+        self.add(pathTesouraria, dotTesouraria, pathEem, dotEem)
+        self.play(dotTesouraria.animate.shift((UP+RIGHT)*0.5), dotEem.animate.shift((UP+LEFT)*0.5), run_time=0.5)
+        self.play(dotTesouraria.animate.shift((RIGHT)*0.8),dotEem.animate.shift((LEFT)*0.8),run_time=0.5)
+        self.play(Write(textTesouraria),Write(textEem1),run_time=0.5)
+        self.play(Write(textEem2),run_time=0.5)
 
-        # Flecha Desenvolvimento
-        self.add(pathDesenvolvimento, dotDesenvolvimento)
-        self.play(dotDesenvolvimento.animate.shift((DOWN+RIGHT)*0.5),run_time=0.5)
-        self.play(dotDesenvolvimento.animate.shift((RIGHT)*0.8),run_time=0.5)
-        self.play(Write(textDesenvolvimento,run_time=0.5))
+        # Flecha Eem
+        #self.add()
+        #self.play(),run_time=0.5)
+        #self.play(,run_time=0.5)
+        #self.play(,run_time=0.5)
+        
 
+        # Flecha Desenvolvimento + Produtos
+        self.add(pathDesenvolvimento, dotDesenvolvimento, 
+                 pathProdutos, dotProdutos)
+        self.play(dotDesenvolvimento.animate.shift((DOWN+RIGHT)*0.5),
+                  dotProdutos.animate.shift((DOWN+LEFT)*0.5),
+                  run_time=0.5)
+        self.play(dotDesenvolvimento.animate.shift((RIGHT)*0.8),
+                  dotProdutos.animate.shift((LEFT)*0.8),run_time=0.5)
+        self.play(Write(textDesenvolvimento),
+                    Write(textProdutos),
+                    run_time=0.5)
+
+        # Flecha Produtos
+        #self.add(pathProdutos, dotProdutos)
+        #self.play(dotProdutos.animate.shift((DOWN+LEFT)*0.5),run_time=0.5)
+        #self.play(dotProdutos.animate.shift((LEFT)*0.8),run_time=0.5)
+        #self.play(Write(textProdutos),run_time=0.5)
+        
         # Flecha Conteudo
         self.add(pathConteudo, dotConteudo)
         self.play(dotConteudo.animate.shift(DOWN),run_time=0.5)
         self.play(Write(textConteudo),run_time=0.5)
 
 
-        # Flecha Produtos
-        self.add(pathProdutos, dotProdutos)
-        self.play(dotProdutos.animate.shift((DOWN+LEFT)*0.5),run_time=0.5)
-        self.play(dotProdutos.animate.shift((LEFT)*0.8),run_time=0.5)
-        self.play(Write(textProdutos),run_time=0.5)
-
-        # Flecha Eem
-        self.add(pathEem, dotEem)
-        self.play(dotEem.animate.shift((UP+LEFT)*0.5),run_time=0.5)
-        self.play(dotEem.animate.shift((LEFT)*0.8),run_time=0.5)
-        self.play(Write(textEem1),run_time=0.5)
-        self.play(Write(textEem2),run_time=0.5)
+        
 
         
-        self.wait()
+
+        
         self.wait()
 
         self.play(self.camera.frame.animate.shift(DOWN*10))
