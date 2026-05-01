@@ -90,7 +90,7 @@ class LinkedinParte1(MovingCameraScene):
 
         self.play(
             self.camera.frame.animate.move_to(traveller.get_center() + offset),
-            run_time=0.6,
+            run_time=0.3,
             rate_func=linear
         )
         for i in range(len(path) - 1):
