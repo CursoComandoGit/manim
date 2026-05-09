@@ -5,9 +5,12 @@ def fix_cap(mob):
         m.set_cap_style(CapStyleType.BUTT)
     return mob
 
-def T(texto, **kwargs):
+def TX(texto, **kwargs):
     return fix_cap(Text(texto, **kwargs))
 
+
+def T(texto, **kwargs):
+    return fix_cap(Tex(texto, **kwargs))
 
 class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só. Na próxima separarei em diferentes classes
     config.background_color = "#1E1E1E"
@@ -103,8 +106,9 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
         tituloTexto = Text("Texto", font_size=80).scale(0.5)
         tituloCode = Text("Código", font_size=80).scale(0.5)
 
-        grupo = VGroup(tituloTexto, tituloCode).arrange(RIGHT, buff=1)
-        grupo.move_to([0,3,0])
+        tituloCode.align_to(tituloTexto, DOWN)
+        grupo2 = VGroup(tituloTexto, tituloCode).arrange(RIGHT, buff=1)
+        grupo2.move_to([0,3,0])
 
         seta = Arrow(tituloTexto.get_right(), tituloCode.get_left(), buff = 0.1, color=PURPLE)
 
@@ -155,7 +159,7 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
                 Write(igual2),
                 FadeIn(livro),
                 lag_ratio=0.5
-            ), run_time = 1
+            ), run_time = 1.6
         )
 
         self.play(FadeOut(ApenasTextoComp), FadeOut(codigo), FadeOut(igual1), FadeOut(carta), FadeOut(igual2), FadeOut(livro), run_time = 1)
@@ -209,7 +213,6 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
         acronym.font_size = 128
         acronym.set_color(PURPLE)
         fullText = Tex("{{I}}ntegrated {{D}}evelopment {{E}}nvironment")
-        fullText.scale(0.8)
 
         # trocar a cor das iniciais para roxo
         fullText.set_color_by_tex("I", PURPLE)
@@ -218,17 +221,19 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
 
         codeblocks = SVGMobject("svgs\\codeblocks")
         eclipse = SVGMobject("svgs\\eclipseide")
-        vim = SVGMobject("svgs\\vim")
         pycharm = SVGMobject("svgs\\pycharm")
         mvs = SVGMobject("svgs\\visualstudio").scale(0.75)
-        neoVim = SVGMobject("svgs\\neovim").scale(0.5)
-        vscode = SVGMobject("svgs\\vscode")
-        sublimeText = SVGMobject("svgs\\sublimetext")
+
+        delphi = SVGMobject("svgs\\delphi")
+        intellij = SVGMobject("svgs\\intellij")
+        webstorm = SVGMobject("svgs\\webstorm")
+        netbeans = SVGMobject("svgs\\netbeans")
+
 
         ide = VGroup(pycharm, mvs, eclipse, codeblocks)
-        top = VGroup(mvs, neoVim, sublimeText, pycharm)
-        bottom = VGroup(eclipse, vim, codeblocks, vscode)
-        naoIde= VGroup(vscode, neoVim, sublimeText, vim)
+        top = VGroup(mvs, intellij, webstorm, pycharm).arrange(RIGHT, buff=1)
+        bottom = VGroup(eclipse, netbeans, codeblocks, delphi).arrange(RIGHT, buff=1)
+        retirarIDEs= VGroup(intellij, webstorm, netbeans, delphi)
 
         text2Group = VGroup(VGroup(letter for letter in text2[:8]),
                             VGroup(letter for letter in text2[8:10]),
@@ -278,20 +283,21 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
         features = VGroup(iaText, net, dataBase, compilacao, debugger, terminalInteg)
 
         #Correção de svgs
-        neoVim[0].set_color("#16B0ED")
-        neoVim[1].set_color("#367533")
-        neoVim[2].set_color("#88C649")
+        
         pycharm[0].set_color("#07C3F2")
         pycharm[1].set_color("#21D789")
         pycharm[2].set_color("#32DA84")
         pycharm[3].set_color("#CFE865")
         pycharm[4].set_color("#F1EB5E")
-        vscode[0].set_color("#32B5F1")
-        vscode[1].set_color("#0E69AC")
-        vscode[2].set_color("#0F6FB3")
-        sublimeText[0].set_color("#D06F00")
-        vim[0].set_color("#019833")
-        vim[10].set_color("#049A20")
+
+        eclipse[0].set_color("#2C2255")
+        eclipse[1].set_color("#2C2255")
+        eclipse[2].set_color("#F7941E")
+        
+        eclipse[3].set_color("#3E2F7F")
+        eclipse[4].set_color("#5441A8")
+        eclipse[5].set_color("#6A56C0")
+        eclipse[6].set_color(WHITE)
 
         #Separando palavras e começando animação
         self.play(Write(rawTitle))
@@ -320,14 +326,10 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
                   text2Group[2][8].animate.move_to([2,-1.5,0]).scale(0) #Ç
                   )
         
-        codeblocks.move_to(text2Group[0][2].get_center())
-        eclipse.move_to(text2Group[0][4].get_center())
-        vim.move_to(text2Group[0][3].get_center())
-        mvs.move_to(text2Group[0][1].get_center())
-        neoVim.move_to(text2Group[0][5].get_center())
-        pycharm.move_to(text2Group[2][0].get_center())
-        sublimeText.move_to(text2Group[0][6].get_center())
-        vscode.move_to(text2Group[2][8].get_center())
+        logos = VGroup(
+            top,
+            bottom
+        ).arrange(DOWN, buff=1)
 
         # colocando a parte inicial sobre código é texto, linguagem de programação e linguagem humana
         self.codigoLivroCarta()
@@ -338,8 +340,8 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
         self.wait()
 
         #Escrevendo logos em cima
-        self.play(Write(codeblocks), Write(eclipse), Write(vim), Write(mvs),
-                  Write(neoVim), Write(pycharm), Write(vscode), Write(sublimeText), run_time=2)
+        self.play(Write(codeblocks), Write(eclipse), Write(netbeans), Write(mvs),
+                  Write(intellij), Write(pycharm), Write(delphi), Write(webstorm), run_time=2)
         self.wait(3)
         
         #Fade em tudo que não saiu
@@ -349,6 +351,7 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
         fullText[0].scale(1.1)
         fullText[2].scale(1.1)
         fullText[4].scale(1.1)
+        fullText.scale(0.95)
 
         #Reposicionando ferramentas
         top.shift([-15, 1, 0]).scale(0.8)
@@ -369,7 +372,7 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
         self.wait()
         
         #Ides e chinelada no codeblocks acontecem aqui
-        self.play(FadeOut(naoIde))
+        self.play(FadeOut(retirarIDEs))
         self.play(ide.animate.arrange(direction=RIGHT,buff=0.5, center=True),
                   ShrinkToCenter(fullText))
         self.wait()
@@ -431,13 +434,12 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
         #Editores aparecem, destaque em vs code
         self.play(Write(titulo), run_time = 1.5)
         self.play(Write(editors), run_time=2)
-        self.wait(2)
+        self.wait(1)
         
         self.play(editors.animate.shift([0,-0.5,0]))
         caixa1.move_to(editors.get_center())
         self.play(editors.animate.scale(0.8), Create(caixa1))
         
-        self.wait(1)
         self.play(Wiggle(vim, run_time=1))
         self.play(Wiggle(sublimeText, run_time=1))
         self.play(Wiggle(notePad, run_time=1))
@@ -452,30 +454,20 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
         # tem que ser na caixa1, porque não foi feita uma copia da caixa2 no Transform
         self.play(Uncreate(caixa1), run_time = 0.5)
         self.play(vscode.animate.move_to(ORIGIN))
-        self.play(vscode.animate.scale(1.2))
+        self.play(vscode.animate.scale(1.6))
 
         #Fade em tudo que não saiu
         self.play(*[FadeOut(obj) for obj in self.mobjects])
         self.wait()
 
     def posInstalacao(self):
-        #text = Text("Configurando um ambiente de programação:", font_size = 45)
+        # text = Text(
+        #     "Configurando um ambiente de programação:",
+        #     t2c={"ambiente": PURPLE},
+        #     font_size = 45
+        # )
 
-        text = Text(
-            "Configurando um ambiente de programação:",
-            t2c={"ambiente": PURPLE},
-            font_size = 45
-        )
-
-        text2 = Text("- Instalar editor de texto")
-        text3 = Text("- Instalar o gcc")
-        text4 = Text("- Usar o terminal")
-
-        fullText = VGroup(text, text2, text3, text4).arrange(DOWN, aligned_edge = LEFT, buff = 0.5).scale(0.8)
-        risco = Line(text2.get_left(), text2.get_right(), cap_style=CapStyleType.ROUND).set_color(RED)
-        risco.set_stroke(RED, 24)
-        risco.set_stroke(opacity = 0.7)
-        risco.move_to(text2.get_center())
+        # text.move_to[0,-3,0]
 
         terminal = ImageMobject("images/terminal.png")
         compilador = ImageMobject("images/compilador.png")
@@ -486,11 +478,11 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
         vscodeGroup[1].align_to(vscode, ORIGIN) # centraliza no meio horizontal
 
         compiladorGroup = Group(compilador, Text("Compilador", font_size = 80).scale(0.3))
-        compiladorGroup[1].next_to(compilador, UP, buff = 0.2)
+        compiladorGroup[1].next_to(compilador, UP, buff = 0.1)
         compiladorGroup[1].align_to(compilador, ORIGIN) 
 
         terminalGroup = Group(terminal, Text("Terminal", font_size = 80).scale(0.3))
-        terminalGroup[1].next_to(terminal, UP, buff = 0.2)
+        terminalGroup[1].next_to(terminal, UP, buff = 0.1)
         terminalGroup[1].align_to(terminal, ORIGIN)
 
         imsGroup = Group(vscodeGroup, compiladorGroup, terminalGroup)
@@ -498,24 +490,16 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
 
         # check (editor de texto já instalado)
         check = VGroup(
-            Line([-0.3, -0.3, 0], [0, -0.6, 0]),   # perna curta
-            Line([0, -0.6, 0], [0.6, 0, 0])      # perna longa
+            Line([-0.2, -0.3, 0], [0.1, -0.6, 0], cap_style = CapStyleType.ROUND),   # perna curta
+            Line([0.1, -0.6, 0], [0.6, 0, 0], cap_style = CapStyleType.ROUND)      # perna longa
         ).set_color(GREEN).set_stroke(width=10)
 
-        check.set_cap_style("round")
+        check.set_cap_style(CapStyleType.ROUND)
         check.next_to(vscode, DOWN, buff = 0.3)
 
         #Riscando
-        self.play(Write(text))
-        self.play(Write(text2), run_time = 0.7)
-        self.play(Write(text3), run_time = 0.7)
-        self.play(Write(text4),  run_time = 0.7)
-        self.wait()
-        self.play(Create(risco))
-        self.wait()
+        # self.play(Write(text))
         
-        #Fade em tudo que não saiu
-        self.play(*[FadeOut(obj) for obj in self.mobjects])
 
         self.play(GrowFromCenter(vscodeGroup[0]),
                 GrowFromCenter(compiladorGroup[0]),
@@ -578,10 +562,73 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
         self.play(FadeOut(winText1))
         self.play(ShrinkToCenter(windows), run_time = 0.5)
         self.wait(1)
+        self.clear()
+
+
+        # animação focando no sistema operacional MAC OS
+        windows = SVGMobject("svgs\\windows11")
+        fix_cap(windows)
+
+        logos = VGroup(linux, windows, mac).arrange(buff=3)
+
+        macText1 = Text("mac", font_size = 90).scale(0.5)
+        macText2 = Text("macOS", font_size = 90).scale(0.5)
+
+        self.play(Create(linha1), Create(linha2))
+        self.wait(0.5)
+        self.play(Write(logos), run_time=1.45)
+        self.wait()
+        self.play(FadeOut(linha1), FadeOut(linha2), FadeOut(windows), FadeOut(linux))
+        self.play(mac.animate.move_to(windows.get_center()))
+        self.wait(0.6)
+        self.play(mac.animate.scale(1.5))
+
+        macText1.move_to(mac.get_center())
+        macText2.move_to(mac.get_center())
+
+        macText1.next_to(mac, DOWN, buff = 0.4)
+        macText2.next_to(mac, DOWN, buff = 0.4)
+
+        self.play(FadeIn(macText1))
+        self.play(Transform(macText1, macText2))
+        self.play(FadeOut(macText1))
+        self.play(ShrinkToCenter(mac), run_time = 0.5)
+        self.wait(1)
+
+        # animação focando no sistema operacional LINUX™
+        mac = SVGMobject("svgs\\mac")
+        fix_cap(mac)
+
+        logos = VGroup(linux, windows, mac).arrange(buff=3)
+
+        linuxText1 = Text("LINUX", font_size = 90).scale(0.5)
+        linuxText2 = Text("LINUX™", font_size = 90).scale(0.5)
+
+        self.play(Create(linha1), Create(linha2))
+        self.wait(0.5)
+        self.play(Write(logos), run_time=1.45)
+        self.wait()
+        self.play(FadeOut(linha1), FadeOut(linha2), FadeOut(windows), FadeOut(mac))
+        self.play(linux.animate.move_to(windows.get_center()))
+        self.wait(0.6)
+        self.play(linux.animate.scale(1.5))
+
+        linuxText1.move_to(linux.get_center())
+        linuxText2.move_to(linux.get_center())
+
+        linuxText1.next_to(linux, DOWN, buff = 0.4)
+        linuxText2.next_to(linux, DOWN, buff = 0.4)
+
+        self.play(FadeIn(linuxText1))
+        self.play(Transform(linuxText1, linuxText2))
+        self.play(FadeOut(linuxText1))
+        self.play(ShrinkToCenter(linux), run_time = 0.5)
+        self.wait(1)
+
 
         #FINAL
-        text = T("Para a próxima aula:", font_size = 45)
-        text2 = T("Variáveis e os 5 Tipos de Dados", color = PURPLE, font_size=50)
+        text = TX("Para a próxima aula:", font_size = 45)
+        text2 = TX("Seu primeiro programa", t2c={"programa": PURPLE}, font_size=50)
         rawTitle = VGroup(text, text2).arrange(DOWN, aligned_edge = LEFT, buff = 0.2)
 
         self.play(Write(text), run_time = 1.5)
@@ -617,17 +664,17 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         utfpr = ImageMobject("images/utfpr.png").scale(0.7)
         
-        creditos = VGroup(diretor, tutor, animadores, editora, roteirista).scale(0.4)
+        creditos = VGroup(diretor, tutor, animadores, editora, roteirista).scale(0.6)
 
         for bloco in creditos:
             if isinstance(bloco, VGroup):
                 bloco.arrange(DOWN, aligned_edge=LEFT)
 
         creditos.arrange(DOWN, aligned_edge=LEFT, buff=0.4)
-        creditos.to_edge(LEFT, buff=0.5)
+        creditos.to_edge(LEFT, buff=0.5).shift(UP*0.2)
 
         utfpr.scale(0.4)
-        utfpr.next_to(creditos, DOWN, buff = 0.3)
+        utfpr.next_to(creditos, DOWN, buff = 0.2)
         utfpr.to_edge(LEFT, buff=0.5)
 
         self.play(
