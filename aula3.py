@@ -116,9 +116,9 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
         aprender2 = Text("de aprendizado e começamos pelos fundamentos.", font_size = 80).scale(0.35)
         condicaoAprender = VGroup(aprender1, aprender2).arrange(DOWN, aligned_edge = LEFT, buff = 0.3)
 
-        codeAprender = '''if (usuario.quer_aprender_c) {
+        codeAprender = '''if (usuario->quer_aprender_c) {
     iniciar_trilha("C");
-    usuario.nivel = 1;
+    usuario->nivel = 1;
     printf("Fundamentos iniciados...");
 }'''
         rendered_codeAprender = Code(
@@ -132,9 +132,9 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
         word = ImageMobject("images/docWord.png").shift(DOWN * 0.4)
 
         textoWord = Text(
-            'if (usuario.quer_aprender_c) {\n'
+            'if (usuario->quer_aprender_c) {\n'
             '    iniciar_trilha("C");\n'
-            '    usuario.nivel = 1;\n'
+            '    usuario->nivel = 1;\n'
             '    printf("Fundamentos iniciados...");\n'
             '}', font_size=80, color="#000000", line_spacing=0.8
         ).scale(0.15)
@@ -189,7 +189,7 @@ class Aula3(Scene): #Essa aula é o último teste com updaters para uma cena só
 
     def introComando(self):
         logoComando = SVGMobject("svgs/comando.svg").scale(2)
-        comando = Text("COMANDO.C", font="Major Mono Display").shift(2*DOWN).scale(0.8)
+        comando = Text("comando.c", font="Major Mono Display").shift(2*DOWN).scale(0.8)
         cursor = Rectangle(
             color = GREY_A,
             fill_color = GREY_A,
